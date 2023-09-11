@@ -6,6 +6,8 @@ const myCatCell = { 'isEmpty': false, "isMyCat": true };
 const itemCell = { 'isEmpty': false, "isItem": true };
 const goToFirstMap = { 'isEmpty': false, 'isJump': true, text: "перейти на локацию 1", 'name': 'firstMap' };
 const goToSecondMap = { 'isEmpty': false, 'isJump': true, text: "перейти на локацию 2", 'name': 'SecondMap' };
+const goToThirdMap = { 'isEmpty': false, 'isJump': true, text: "перейти на локацию 3", 'name': 'ThirdMap' };
+
 let firstMap = [
     [null, myCatCell, itemCell, itemCell, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null],
@@ -16,10 +18,18 @@ let firstMap = [
 ]
 
 
-
 let SecondMap = [
     [null, myCatCell, itemCell],
     [itemCell, null, itemCell],
+    [null, null, null],
+    [null, null, goToFirstMap],
+    [null, null, null],
+    [null, goToThirdMap, null],
+]
+
+let ThirdMap = [
+    [null, myCatCell, null],
+    [null, null, itemCell],
     [null, null, null],
     [null, null, goToFirstMap],
     [null, null, null],
@@ -28,7 +38,6 @@ let SecondMap = [
 
 
 export default function Map() {
-    console.log("map");
     const [currentMap, setCurrentMap] = useState(firstMap);
     function renewMap(newMapValue) {
         switch (newMapValue) {
@@ -36,9 +45,10 @@ export default function Map() {
                 setCurrentMap(firstMap);
                 break;
             case 'SecondMap':
-                console.log(currentMap)
                 setCurrentMap(SecondMap);
-                console.log(currentMap)
+                break;
+            case 'ThirdMap':
+                setCurrentMap(ThirdMap);
                 break;
             default:
                 setCurrentMap(firstMap);

@@ -9,6 +9,7 @@ export default function CustomField(props) {
 
   useEffect(() => { setArrState(props.currentMap) }, props.currentMap);
   const [arrState, setArrState] = useState(props.currentMap);
+  const [modalText, setModalText] = useState();
 
   function createItems() {
     const listItems = arrState.map((number, id) => {
@@ -36,17 +37,35 @@ export default function CustomField(props) {
   }
 
   function handleCellClick(clickRowId, clickCellId) {
+    setModalText()
     if (arrState[clickRowId][clickCellId]) {
       if (!arrState[clickRowId][clickCellId].isEmpty) {
-        if(arrState[clickRowId][clickCellId].isJump){
+        if (arrState[clickRowId][clickCellId].isJump) {
           props.renewMap(arrState[clickRowId][clickCellId].name);
+          return;
         }
-        
+        checkCatPosition(clickRowId, clickCellId, props.myCatCell);
         return;
       }
+
     }
     cleanOldCat(arrState, props.myCatCell);
     updateElement(clickRowId, clickCellId, props.myCatCell);
+
+  }
+
+  function checkCatPosition(clickRowId, clickCellId, myCatCell) {
+    for (let i = 0; i < arrState.length; i++) {
+      const columnIndex = arrState[i].findIndex(element => element === myCatCell);
+      if (columnIndex !== -1) {
+        if ((clickRowId == i && (clickCellId == columnIndex - 1 || clickCellId == columnIndex + 1))
+          || ((clickRowId == i + 1 || clickRowId == i - 1) && (clickCellId == columnIndex || clickCellId == columnIndex + 1 || clickCellId == columnIndex - 1))
+        ) {
+          console.log("по краям");
+          setModalText("Цэ камень");
+        }
+      }
+    }
 
   }
 
@@ -66,6 +85,10 @@ export default function CustomField(props) {
   };
 
   return (
-    <div className="custom-field">{createItems(arrState)}</div>
+    <React.Fragment>
+      <div className="custom-field">{createItems(arrState)}</div>
+      {modalText && <div className="modal"><div>{modalText}</div></div>}
+    </React.Fragment>
+
   );
 }
