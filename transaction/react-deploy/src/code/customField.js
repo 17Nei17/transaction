@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import myCat from '../myCat.png'
 import itemImage from '../item.png'
-
-
+import mataCatoDor from "../mataCatoDor.png"
 
 
 export default function CustomField(props) {
@@ -10,6 +9,15 @@ export default function CustomField(props) {
   useEffect(() => { setArrState(props.currentMap) }, props.currentMap);
   const [arrState, setArrState] = useState(props.currentMap);
   const [modalText, setModalText] = useState();
+  const [isBattle, setBattle] = useState(false);
+
+  useEffect(() => { startBattle() }, [isBattle]);
+
+  function startBattle(){
+    if(isBattle){
+      props.renewMode("Battle");
+    }
+  }
 
   function createItems() {
     const listItems = arrState.map((number, id) => {
@@ -30,6 +38,9 @@ export default function CustomField(props) {
       if (item.isItem) {
         return <img src={itemImage} />;
       }
+      if (item.isEnemy) {
+        return <img src={mataCatoDor} />;
+      }
       if (item.isJump) {
         return <div>{item.text}</div>;
       }
@@ -37,7 +48,7 @@ export default function CustomField(props) {
   }
 
   function handleCellClick(clickRowId, clickCellId) {
-    setModalText()
+    setModalText();
     if (arrState[clickRowId][clickCellId]) {
       if (!arrState[clickRowId][clickCellId].isEmpty) {
         if (arrState[clickRowId][clickCellId].isJump) {
@@ -61,8 +72,12 @@ export default function CustomField(props) {
         if ((clickRowId == i && (clickCellId == columnIndex - 1 || clickCellId == columnIndex + 1))
           || ((clickRowId == i + 1 || clickRowId == i - 1) && (clickCellId == columnIndex || clickCellId == columnIndex + 1 || clickCellId == columnIndex - 1))
         ) {
-          console.log("по краям");
-          setModalText("Цэ камень");
+          if (arrState[clickRowId][clickCellId].isEnemy) {
+            setModalText({ name: arrState[clickRowId][clickCellId].name, text: "Враг", isEnemy: true });
+          } else {
+            setModalText({ name: arrState[clickRowId][clickCellId].name, text: "Камень" });
+          }
+
         }
       }
     }
@@ -87,8 +102,14 @@ export default function CustomField(props) {
   return (
     <React.Fragment>
       <div className="custom-field">{createItems(arrState)}</div>
-      {modalText && <div className="modal"><div>{modalText}</div></div>}
-    </React.Fragment>
+      {modalText && <div className="modal">
+        <div>
+          <div>{modalText.name}</div>
+          <div>{modalText.text}</div>
+          {modalText.isEnemy && <button onClick={() => setBattle(true)}>Удалить строку</button>}
+        </div>
+      </div>}
+    </React.Fragment >
 
   );
 }

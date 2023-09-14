@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CustomField from './customField'
 
 
@@ -8,11 +8,13 @@ const goToFirstMap = { 'isEmpty': false, 'isJump': true, text: "перейти �
 const goToSecondMap = { 'isEmpty': false, 'isJump': true, text: "перейти на локацию 2", 'name': 'SecondMap' };
 const goToThirdMap = { 'isEmpty': false, 'isJump': true, text: "перейти на локацию 3", 'name': 'ThirdMap' };
 
+const MataCatoDor = { 'isEmpty': false, 'isEnemy': true, 'name': 'Вихреспинка' };
+
 let firstMap = [
     [null, myCatCell, itemCell, itemCell, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null, null, null],
     [null, null, null, null, null, itemCell, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null, null],
+    [null, MataCatoDor, null, null, null, null, null, null, null, null],
     [null, null, null, null, itemCell, null, null, null, null, null],
     [null, null, null, itemCell, null, null, null, null, null, goToSecondMap]
 ]
@@ -39,6 +41,10 @@ let ThirdMap = [
 
 export default function Map() {
     const [currentMap, setCurrentMap] = useState(firstMap);
+    const [currentMode, setCurrentMode] = useState("Map");
+
+    useEffect(() => {console.log(currentMode)});
+
     function renewMap(newMapValue) {
         switch (newMapValue) {
             case 'firstMap':
@@ -54,8 +60,15 @@ export default function Map() {
                 setCurrentMap(firstMap);
         }
     }
+    function renewMode(){
+        setCurrentMode("Battle");
+    }
 
     return (
-        <CustomField currentMap={currentMap} myCatCell={myCatCell} renewMap={renewMap} />
+        <React.Fragment>
+            {currentMode === "Map" && <CustomField currentMap={currentMap} myCatCell={myCatCell} renewMap={renewMap} renewMode={renewMode}/>}
+            {currentMode !== "Map" && <div>battle!</div>}
+        </React.Fragment>
+
     );
 }
