@@ -15,7 +15,7 @@ export default function CustomField(props) {
 
   function startBattle(){
     if(isBattle){
-      props.renewMode("Battle");
+      props.renewMode("Battle" , "Matador");
     }
   }
 
@@ -106,7 +106,7 @@ export default function CustomField(props) {
         <div>
           <div>{modalText.name}</div>
           <div>{modalText.text}</div>
-          {modalText.isEnemy && <button onClick={() => setBattle(true)}>Удалить строку</button>}
+          {modalText.isEnemy && <button onClick={() => setBattle(true)}>Атаковать</button>}
         </div>
       </div>}
     </React.Fragment >

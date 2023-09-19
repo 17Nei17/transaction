@@ -55,3 +55,84 @@
   background: -webkit-linear-gradient(#fff, #999);
   background: -o-linear-gradient(#fff, #999);
 }
+
+.battle-field {
+  width: 1360px;
+  height: 768px;
+  background-color: beige;
+  position: relative;
+}
+
+.turn-icon-wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+.ally-stats-wrap {
+  position: absolute;
+  right: 0;
+  top: 100px;
+}
+
+.ally-stats-wrap .ally-stats-item {
+  width: 80px;
+  height: 50px;
+  border: 1px solid red;
+}
+
+.ally-block {
+  display: flex;
+  flex-direction: row;
+}
+.ally-block .ally-cat-wrap {
+  width: 170px;
+  height: 250px;
+  border: 1px solid red;
+}
+
+.enemy-block {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  top: 150px;
+}
+.enemy-block .enemy-cat-wrap {
+  width: 170px;
+  height: 250px;
+  border: 1px solid red;
+}
+
+.turn-icon {
+  width: 70px;
+  height: 70px;
+  border: 1px solid red;
+}
+
+.turn-icon.greenIcon {
+color: green;
+}
+.turn-icon.redIcon {
+  color: red;
+  }
+
+.botton-line {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.menu-wrap {
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid;
+}
+
+.enemy-cat-wrap.active,
+.ally-cat-wrap.active {
+  background-color: red;
+}

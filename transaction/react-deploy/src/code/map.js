@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CustomField from './customField'
-
+import BattleField from "./battleField"
 
 const myCatCell = { 'isEmpty': false, "isMyCat": true };
 const itemCell = { 'isEmpty': false, "isItem": true };
@@ -42,6 +42,7 @@ let ThirdMap = [
 export default function Map() {
     const [currentMap, setCurrentMap] = useState(firstMap);
     const [currentMode, setCurrentMode] = useState("Map");
+    const [currentEnemy, setCurrentEnemy] = useState();
 
     useEffect(() => {console.log(currentMode)});
 
@@ -60,14 +61,16 @@ export default function Map() {
                 setCurrentMap(firstMap);
         }
     }
-    function renewMode(){
+    function renewMode(mode, enemyName){
         setCurrentMode("Battle");
+        setCurrentEnemy(enemyName);
+        
     }
 
     return (
         <React.Fragment>
             {currentMode === "Map" && <CustomField currentMap={currentMap} myCatCell={myCatCell} renewMap={renewMap} renewMode={renewMode}/>}
-            {currentMode !== "Map" && <div>battle!</div>}
+            {currentMode !== "Map" && <BattleField currentEnemy={currentEnemy}></BattleField>}
         </React.Fragment>
 
     );
