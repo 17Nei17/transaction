@@ -44,7 +44,7 @@ export default function Map() {
     const [currentMode, setCurrentMode] = useState("Map");
     const [currentEnemy, setCurrentEnemy] = useState();
 
-    useEffect(() => {console.log(currentMode)});
+    useEffect(() => { console.log(currentMode) });
 
     function renewMap(newMapValue) {
         switch (newMapValue) {
@@ -61,15 +61,14 @@ export default function Map() {
                 setCurrentMap(firstMap);
         }
     }
-    function renewMode(mode, enemyName){
+    function renewMode(mode, enemyName) {
         setCurrentMode("Battle");
         setCurrentEnemy(enemyName);
-        
     }
 
     return (
         <React.Fragment>
-            {currentMode === "Map" && <CustomField currentMap={currentMap} myCatCell={myCatCell} renewMap={renewMap} renewMode={renewMode}/>}
+            {currentMode === "Map" && <CustomField currentMap={currentMap} myCatCell={myCatCell} renewMap={renewMap} renewMode={renewMode} />}
             {currentMode !== "Map" && <BattleField currentEnemy={currentEnemy}></BattleField>}
         </React.Fragment>
 
