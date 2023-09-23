@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from "react";
 
 export default function RenderBattleField(props) {
+    const [activeSkill, setActiveSkill] = useState();
+
+    useEffect(() => { }, [activeSkill]);
+
     function createEnemies() {
         if (props.currentEnemy === "Matador") {
             const enemyLists = props.enemyObj.map((enemyItem, id) => {
                 return (
-                    <div
-                        className={
-                            props.currentTurn.name === enemyItem.name
-                                ? "enemy-cat-wrap active"
-                                : "enemy-cat-wrap"
-                        }
-                        id={enemyItem.name}
-                    >
-                        <div className="enemyHP">{enemyItem.hp}</div>
-                        <div className="image">{enemyItem.image}</div>
+                    <div className={enemyItem.isAlive ? 'enemy-cat-wrap alive ' : 'enemy-cat-wrap death '}>
+                        <div
+                            className={props.currentTurn.name === enemyItem.name ? 'active' : ''}
+                            id={enemyItem.name}
+                        >
+                            <div className="enemyHP">{enemyItem.hp}</div>
+                            <div className="image">{enemyItem.image}</div>
+                        </div>
                     </div>
+
                 );
             });
             return enemyLists;
@@ -25,17 +28,19 @@ export default function RenderBattleField(props) {
     function createAllies() {
         const allyList = props.currentParty.map((allyItem, id) => {
             return (
-                <div
-                    className={
-                        props.currentTurn.name === allyItem.name
-                            ? "ally-cat-wrap active"
-                            : "ally-cat-wrap"
-                    }
-                    id={allyItem.name}
-                >
-                    <div className="allyHP">{allyItem.hp}</div>
-                    <div className="image">{allyItem.image}</div>
+                <div className={
+                    allyItem.isAlive ? "ally-cat-wrap alive" : "ally-cat-wrap death"
+                }>
+                    <div
+                        className={props.currentTurn.name === allyItem.name ? "active" : ""
+                        }
+                        id={allyItem.name}
+                    >
+                        <div className="allyHP">{allyItem.hp}</div>
+                        <div className="image">{allyItem.image}</div>
+                    </div>
                 </div>
+
             );
         });
         return allyList;
@@ -45,24 +50,44 @@ export default function RenderBattleField(props) {
         const skillList = props.currentParty.map((allyItem, id) => {
             if (allyItem.name === props.currentTurn.name) {
                 return allyItem.skills.map((skill, id) => {
-                    return <div onClick={props.useSkill}>{skill}</div>;
+                    return <div onClick={() => { selectSkill(skill) }}>{skill}</div>;
                 });
             }
         });
         return skillList;
     }
 
+    function selectSkill(skill) {
+        setActiveSkill(skill)
+    }
+
+    function renderSelectEnemy() {
+        if (activeSkill) {
+            let enemyCats = props.enemyObj.map(enemyCat => {
+                if (enemyCat.isAlive) {
+                    return <div onClick={() => { selectEnemyCat(enemyCat.name, activeSkill) }}>{enemyCat.name}</div>;
+                }
+            });
+            return enemyCats;
+        }
+    }
+
+    function selectEnemyCat(name, activeSkill) {
+        props.useSkill(activeSkill, name);
+        setActiveSkill();
+    }
+
     function createRightMenu() {
-        const leftMenuList = props.currentParty.map((allyItem, id) => {
+        const rightMenuList = props.currentParty.map((allyItem, id) => {
             return (
-                <div className="ally-stats-item" id={id}>
+                <div className={allyItem.isAlive ? 'ally-stats-item alive' : 'ally-stats-item death'} id={id}>
                     <div>{allyItem.name}</div>
                     <div className="allyHP">{allyItem.hp}</div>
                     <div className="image">{allyItem.image}</div>
                 </div>
             );
         });
-        return leftMenuList;
+        return rightMenuList;
     }
 
     function initTurns() {
@@ -90,6 +115,7 @@ export default function RenderBattleField(props) {
                 <div className="enemy-block">{createEnemies()}</div>
                 <div className="botton-line">
                     <div className="menu-wrap">{createMenu()}</div>
+                    <div className="menu-wrap">{renderSelectEnemy()}</div>
                     <div className="ally-block">{createAllies()}</div>
                 </div>
             </div>

@@ -4,6 +4,9 @@ import matadorSkillsetSwitch from "./skillsSets/matadorSkillsetSwitch";
 import getRandomInt from "./skillsSets/getRandom";
 import Matador from "./Objects/matador.js";
 import currentParty from "./Objects/currentParty.js";
+import checkPartyHp from "./skillsSets/checkPartyHp";
+import odnomeroSkillSetSwitch from './skillsSets/odnomeroSkillSetSwitch.js'
+import shrodingerSkillSetSwitch from './skillsSets/shrodingerSkillSetSwitch.js'
 
 export default function BattleField(props) {
     const currentEnemy = props.currentEnemy;
@@ -19,31 +22,66 @@ export default function BattleField(props) {
 
     useEffect(() => {
         if (currentTurn.isEnemy === true) {
+            let enemyPartyAlive = false;
             currentTurn.turns.forEach((item, index) => {
-                setTimeout(function () {
+                if (currentTurn.isAlive) {
+                    enemyPartyAlive = true;
+                    // ход живого противника
+                    setTimeout(function () {
+                        setActiveTurnIndex(index);
+                        matadorSkillsetSwitch(
+                            currentTurn.skills[getRandomInt(currentTurn.skills.length - 1)],
+                            currentParty,
+                            currentTurn
+                        );
+                        if (index === currentTurn.turns.length - 1) {
+                            changeTurn();
+                        }
+                    }, index * 1000);
+                } else {
+                    // мертвые пробегают хода в массиве но ничего не делают
                     setActiveTurnIndex(index);
-                    matadorSkillsetSwitch(
-                        currentTurn.skills[getRandomInt(currentTurn.skills.length - 1)],
-                        currentParty,
-                        currentTurn
-                    );
                     if (index === currentTurn.turns.length - 1) {
                         changeTurn();
                     }
-                }, index * 1000);
+                }
             });
+            if (!enemyPartyAlive) {
+                console.log("все враги умерли")
+            }
         } else {
             console.log("ход игрока");
+            let isPartyAlive = false;
+
+            currentParty.forEach((currentCat, index) => {
+                if (currentCat.isAlive) {
+                    isPartyAlive = true;
+                }
+            })
+            if (isPartyAlive) {
+                if (!currentTurn.isAlive) {
+                    changeTurn();
+                }
+            } else {
+                console.log("Все союзники умерли")
+            }
         }
     }, [currentTurn]);
 
-    function shredingerAttack() {
-        Matador[0].hp = Matador[0].hp - 10;
-    }
 
-    function useSkill() {
+    function useSkill(skill, enemyName) {
+        //todo enemyName это выбранный враг по которому ударить скиллом. Нужно написать выбор
         console.log("скилл игрока");
-        shredingerAttack();
+        switch (currentTurn.name) {
+            case "Одномеро":
+                odnomeroSkillSetSwitch(skill, Matador);
+                break;
+            case "Шредингер":
+                shrodingerSkillSetSwitch(skill, Matador);
+                break;
+            default:
+                alert("Что-то сломалось в выборе скилла игрока");
+        }
         changeTurn();
     }
 
