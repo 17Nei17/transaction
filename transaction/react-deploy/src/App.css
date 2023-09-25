@@ -18,6 +18,7 @@
 }
 
 .App {
+  flex-direction: column;
   width: 100%;
   display: flex;
   align-items: center;
@@ -44,7 +45,7 @@
   pointer-events: auto;
 }
 
-.modal>div {
+.modal > div {
   width: 400px;
   position: relative;
   margin: 10% auto;
@@ -169,4 +170,12 @@
 
 .turn-icon.active img {
   background: gold;
+}
+
+.ally-block img {
+  max-width: 150px;
+}
+
+.ally-stats-wrap img {
+  max-width: 70px;
 }

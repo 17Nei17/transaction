@@ -10,6 +10,7 @@ const goToSecondMap = { 'isEmpty': false, 'isJump': true, text: "перейти 
 const goToThirdMap = { 'isEmpty': false, 'isJump': true, text: "перейти на локацию 3", 'name': 'ThirdMap' };
 
 const MataCatoDor = { 'isEmpty': false, 'isEnemy': true, 'name': 'Вихреспинка' };
+const easyCat = { 'isEmpty': false, 'isEnemy': true, 'name': '???' };
 
 let firstMap = [
     [null, myCatCell, itemCell, itemCell, null, null, null, null, null, null],
@@ -34,12 +35,10 @@ let ThirdMap = [
     [null, myCatCell, null],
     [null, null, itemCell],
     [null, null, null],
-    [null, null, goToFirstMap],
+    [easyCat, null, goToFirstMap],
     [null, null, null],
     [null, null, null],
     [null, null, null],
-    [null, null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null, null],
     [null, null, null],
     [null, null, null],
     [null, null, null],
@@ -53,9 +52,12 @@ let ThirdMap = [
 
 
 export default function Map() {
+    const currentDate = new Date().getHours();
+    const [currentDayState, setDayState] = useState((currentDate < 12 || currentDate > 1) ? 'day' : 'night');
     const [currentMap, setCurrentMap] = useState(firstMap);
     const [currentMode, setCurrentMode] = useState("Map");
     const [currentEnemy, setCurrentEnemy] = useState();
+   
 
     useEffect(() => { console.log(currentMode) });
 
@@ -81,7 +83,7 @@ export default function Map() {
 
     return (
         <React.Fragment>
-            {currentMode === "Map" && <CustomField currentMap={currentMap} myCatCell={myCatCell} renewMap={renewMap} renewMode={renewMode} />}
+            {currentMode === "Map" && <CustomField currentDate={currentDayState} currentMap={currentMap} myCatCell={myCatCell} renewMap={renewMap} renewMode={renewMode} />}
             {currentMode === "Battle" && <BattleField currentEnemy={currentEnemy} renewMode={renewMode}></BattleField>}
             {currentMode === "GameOver" && <GameOver text='Вы проиграли'></GameOver>}
             {currentMode === "WinBattle" && <GameOver text='Все враги убиты'></GameOver>}

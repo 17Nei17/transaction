@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import myCat from "../myCat.png";
 import itemImage from "../item.png";
 import mataCatoDor from "../mataCatoDor.png";
+import enemy from '../images/enemy.jpg'
 
 export default function CustomField(props) {
     useEffect(() => {
@@ -9,15 +10,15 @@ export default function CustomField(props) {
     }, props.currentMap);
     const [arrState, setArrState] = useState(props.currentMap);
     const [modalText, setModalText] = useState();
-    const [isBattle, setBattle] = useState(false);
+    const [isBattle, setBattle] = useState({ currentBattle: false, enemyName: '' });
 
     useEffect(() => {
         startBattle();
     }, [isBattle]);
 
     function startBattle() {
-        if (isBattle) {
-            props.renewMode("Battle", "Matador");
+        if (isBattle.currentBattle) {
+            props.renewMode("Battle", isBattle.enemyName);
         }
     }
 
@@ -54,8 +55,11 @@ export default function CustomField(props) {
             if (item.isItem) {
                 return <img src={itemImage} />;
             }
-            if (item.isEnemy) {
+            if (item.isEnemy && item.name === 'Вихреспинка') {
                 return <img src={mataCatoDor} />;
+            }
+            if (item.isEnemy && item.name === '???') {
+                return <img src={enemy} />;
             }
             if (item.isJump) {
                 return <div>{item.text}</div>;
@@ -75,25 +79,25 @@ export default function CustomField(props) {
                 return;
             }
         }
-        for (let i = 0; i < arrState.length; i++) {
-            const columnIndex = arrState[i].findIndex(
-                (element) => element === props.myCatCell
-            );
-            if (columnIndex !== -1) {
-                if (
-                    (clickRowId === i &&
-                        (clickCellId === columnIndex - 1 ||
-                            clickCellId === columnIndex + 1)) ||
-                    ((clickRowId === i + 1 || clickRowId === i - 1) &&
-                        (clickCellId === columnIndex ||
-                            clickCellId === columnIndex + 1 ||
-                            clickCellId === columnIndex - 1))
-                ) {
-                    cleanOldCat(arrState, props.myCatCell);
-                    updateElement(clickRowId, clickCellId, props.myCatCell);
-                }
-            }
-        }
+        // for (let i = 0; i < arrState.length; i++) {
+        //     const columnIndex = arrState[i].findIndex(
+        //         (element) => element === props.myCatCell
+        //     );
+        //     if (columnIndex !== -1) {
+        //         if (
+        //             (clickRowId === i &&
+        //                 (clickCellId === columnIndex - 1 ||
+        //                     clickCellId === columnIndex + 1)) ||
+        //             ((clickRowId === i + 1 || clickRowId === i - 1) &&
+        //                 (clickCellId === columnIndex ||
+        //                     clickCellId === columnIndex + 1 ||
+        //                     clickCellId === columnIndex - 1))
+        //         ) {
+        cleanOldCat(arrState, props.myCatCell);
+        updateElement(clickRowId, clickCellId, props.myCatCell);
+        //         }
+        //     }
+        // }
     }
 
     function checkCatPosition(clickRowId, clickCellId, myCatCell) {
@@ -145,14 +149,15 @@ export default function CustomField(props) {
 
     return (
         <React.Fragment>
-            <div className="custom-field">{createItems(arrState)}</div>
+            <div>{props.currentDate}</div>
+            <div className={props.currentDate ? 'custom-field day' : 'custom-field night'}>{createItems(arrState)}</div>
             {modalText && (
                 <div className="modal">
                     <div>
                         <div>{modalText.name}</div>
                         <div>{modalText.text}</div>
                         {modalText.isEnemy && (
-                            <button onClick={() => setBattle(true)}>Атаковать</button>
+                            <button onClick={() => setBattle({ currentBattle: true, enemyName: modalText.name })}>Атаковать</button>
                         )}
                         <button onClick={() => closeModal()}>Закрыть</button>
                     </div>

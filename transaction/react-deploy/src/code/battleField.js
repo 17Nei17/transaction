@@ -3,27 +3,46 @@ import RenderBattleField from "./renderBattleField";
 import matadorSkillsetSwitch from "./skillsSets/matadorSkillsetSwitch";
 import getRandomInt from "./skillsSets/getRandom";
 import Matador from "./Objects/matador.js";
+import easyEnemy from './Objects/easyEnemy.js'
 import currentParty from "./Objects/currentParty.js";
 import odnomeroSkillSetSwitch from './skillsSets/odnomeroSkillSetSwitch.js'
 import shrodingerSkillSetSwitch from './skillsSets/shrodingerSkillSetSwitch.js'
 
+
+
 export default function BattleField(props) {
-    const currentEnemy = props.currentEnemy;
+    const currentEnemyName = props.currentEnemy;
+    let currernEnemyObj = {};
+
+    switch (currentEnemyName) {
+        case "Вихреспинка":
+            currernEnemyObj = Matador;
+            break;
+        case "???":
+            currernEnemyObj = easyEnemy;
+            break;
+        default:
+            alert("Что-то сломалось в выборе противника");
+    }
+
     const [currentTurn, setCurrentTurn] = useState(
-        Matador.concat(currentParty)[0]
+        currernEnemyObj.concat(currentParty)[0]
     );
+    const [allyExtraTurn, setAllyExtraTurn] = useState(false);
     const [activeTurnIndex, setActiveTurnIndex] = useState(0);
     const [turnHistory, setTurnInHistory] = useState(
-        Matador.concat(currentParty)
+        currernEnemyObj.concat(currentParty)
     );
 
-    useEffect(() => { });
+    // useEffect(() => {
+
+
+    // }, []);
 
     useEffect(() => {
-        console.log(Matador)
         if (currentTurn.isEnemy === true) {
             let enemyPartyAlive = false;
-            Matador.forEach((enemyCat, index) => {
+            currernEnemyObj.forEach((enemyCat, index) => {
                 if (enemyCat.isAlive) {
                     enemyPartyAlive = true;
                 }
@@ -72,24 +91,26 @@ export default function BattleField(props) {
                 props.renewMode('GameOver', '')
             }
         }
-    }, [currentTurn]);
+
+    }, [currentTurn, allyExtraTurn]);
 
 
     function useSkill(skill, enemyName) {
-        console.log(enemyName)
-        //todo enemyName это выбранный враг по которому ударить скиллом. Нужно написать выбор
-        console.log("скилл игрока");
+        switchAllyTurn(skill, enemyName);
+        changeTurn();
+    }
+
+    function switchAllyTurn(skill, enemyName) {
         switch (currentTurn.name) {
             case "Одномеро":
-                odnomeroSkillSetSwitch(skill, Matador);
+                odnomeroSkillSetSwitch(skill, currernEnemyObj, enemyName, setAllyExtraTurn);
                 break;
             case "Шредингер":
-                shrodingerSkillSetSwitch(skill, Matador);
+                shrodingerSkillSetSwitch(skill, currernEnemyObj, enemyName, setAllyExtraTurn);
                 break;
             default:
                 alert("Что-то сломалось в выборе скилла игрока");
         }
-        changeTurn();
     }
 
     function changeTurn() {
@@ -102,8 +123,8 @@ export default function BattleField(props) {
 
     return (
         <RenderBattleField
-            currentEnemy={currentEnemy}
-            enemyObj={Matador}
+            currentEnemy={currentEnemyName}
+            enemyObj={currernEnemyObj}
             currentTurn={currentTurn}
             currentParty={currentParty}
             activeTurnIndex={activeTurnIndex}

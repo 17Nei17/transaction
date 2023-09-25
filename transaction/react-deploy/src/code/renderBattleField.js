@@ -9,7 +9,7 @@ export default function RenderBattleField(props) {
     useEffect(() => { }, [activeSkill]);
 
     function createEnemies() {
-        if (props.currentEnemy === "Matador") {
+        if (props.currentEnemy === "Вихреспинка") {
             const enemyLists = props.enemyObj.map((enemyItem, id) => {
                 return (
                     <div className={enemyItem.isAlive ? 'enemy-cat-wrap alive ' : 'enemy-cat-wrap death '}>
@@ -18,7 +18,28 @@ export default function RenderBattleField(props) {
                             id={enemyItem.name}
                         >
                             <div className="enemyHP">{enemyItem.hp}</div>
-                            <div className="image">{enemyItem.image}</div>
+                            <div className="image">
+                                <img src={enemyItem.image} />
+                            </div>
+                        </div>
+                    </div>
+
+                );
+            });
+            return enemyLists;
+        }
+        if (props.currentEnemy === "???") {
+            const enemyLists = props.enemyObj.map((enemyItem, id) => {
+                return (
+                    <div className={enemyItem.isAlive ? 'enemy-cat-wrap alive ' : 'enemy-cat-wrap death '}>
+                        <div
+                            className={props.currentTurn.name === enemyItem.name ? 'active' : ''}
+                            id={enemyItem.name}
+                        >
+                            <div className="enemyHP">{enemyItem.hp}</div>
+                            <div className="image">
+                                <img src={enemyItem.image} />
+                            </div>
                         </div>
                     </div>
 
@@ -40,7 +61,7 @@ export default function RenderBattleField(props) {
                         id={allyItem.name}
                     >
                         <div className="allyHP">{allyItem.hp}</div>
-                        <div className="image">{allyItem.image}</div>
+                        <div className="image"><img src={allyItem.image} /></div>
                     </div>
                 </div>
 
@@ -90,7 +111,7 @@ export default function RenderBattleField(props) {
                 <div className={allyItem.isAlive ? 'ally-stats-item alive' : 'ally-stats-item death'} id={id}>
                     <div>{allyItem.name}</div>
                     <div className="allyHP">{allyItem.hp}</div>
-                    <div className="image">{allyItem.image}</div>
+                    <div className="image"><img src={allyItem.image} /></div>
                 </div>
             );
         });

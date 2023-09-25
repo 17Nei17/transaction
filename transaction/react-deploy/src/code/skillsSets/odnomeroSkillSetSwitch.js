@@ -3,7 +3,7 @@ import checkPartyHp from './checkPartyHp';
 
 export default function odnomeroSkillSetSwitch(currentSkill, enenyParty) {
     switch (currentSkill) {
-        case "кусь":
+        case "Удар лапой":
             console.log(currentSkill);
             shredingerAttack(enenyParty);
             break;

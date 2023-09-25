@@ -1,12 +1,14 @@
+import enemy from '../../images/enemy.jpg'
+
 let redCapote = { name: 'redCapote', aoe: false, damage: 10, castOnAlly: false };
 let andalucia = { name: 'andalucia', aoe: false, damage: 10, castOnAlly: false };
 let mazan = { name: 'mazan', aoe: false, damage: 10, castOnAlly: false };
 
-let Matador = [
+let easyEnemy = [
     {
         isEnemy: true,
-        image: "asd",
-        name: "Matador",
+        image: enemy,
+        name: "???",
         hp: 50,
         skills: [
             redCapote, andalucia, mazan
@@ -15,18 +17,6 @@ let Matador = [
         weakness: [],
         isAlive: true,
     },
-    {
-        isEnemy: true,
-        image: "asd2",
-        name: "Саня",
-        hp: 50,
-        skills: [
-            redCapote, andalucia, mazan
-        ],
-        turns: [1, 2, 3, 4],
-        weakness: ['wind'],
-        isAlive: true,
-    },
 ];
 
-export default Matador;
+export default easyEnemy;
