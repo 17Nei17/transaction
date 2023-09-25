@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import redPaw from '../images/redPaw.png'
+import greenPaw from '../images/greenPaw.png'
+
 
 export default function RenderBattleField(props) {
     const [activeSkill, setActiveSkill] = useState();
@@ -50,7 +53,7 @@ export default function RenderBattleField(props) {
         const skillList = props.currentParty.map((allyItem, id) => {
             if (allyItem.name === props.currentTurn.name) {
                 return allyItem.skills.map((skill, id) => {
-                    return <div onClick={() => { selectSkill(skill) }}>{skill}</div>;
+                    return <div onClick={() => { selectSkill(skill) }}>{skill.name}</div>;
                 });
             }
         });
@@ -58,7 +61,11 @@ export default function RenderBattleField(props) {
     }
 
     function selectSkill(skill) {
-        setActiveSkill(skill)
+        if (skill.aoe) {
+            props.useSkill(skill, 'aoe');
+        } else {
+            setActiveSkill(skill)
+        }
     }
 
     function renderSelectEnemy() {
@@ -100,7 +107,9 @@ export default function RenderBattleField(props) {
                             : "greenIcon turn-icon"
                     }
                 >
-                    {index === props.activeTurnIndex ? "active" : ""}
+                    <div className={index === props.activeTurnIndex ? "active turn-icon" : "turn-icon"}>
+                        <img src={props.currentTurn.isEnemy ? redPaw : greenPaw} />
+                    </div>
                 </div>
             );
         });

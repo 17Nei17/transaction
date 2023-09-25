@@ -6,7 +6,7 @@ export default function matadorSkillsetSwitch(
     currentParty,
     currentTurn
 ) {
-    switch (currentSkill) {
+    switch (currentSkill.name) {
         case "redCapote":
             console.log("враг кастует redCapote");
             mazanSkillCast(currentParty, currentTurn);

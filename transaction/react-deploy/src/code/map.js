@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CustomField from './customField'
 import BattleField from "./battleField"
+import GameOver from './gameOver'
 
 const myCatCell = { 'isEmpty': false, "isMyCat": true };
 const itemCell = { 'isEmpty': false, "isItem": true };
@@ -36,6 +37,18 @@ let ThirdMap = [
     [null, null, goToFirstMap],
     [null, null, null],
     [null, null, null],
+    [null, null, null],
+    [null, null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null, null],
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
 ]
 
 
@@ -62,14 +75,16 @@ export default function Map() {
         }
     }
     function renewMode(mode, enemyName) {
-        setCurrentMode("Battle");
+        setCurrentMode(mode);
         setCurrentEnemy(enemyName);
     }
 
     return (
         <React.Fragment>
             {currentMode === "Map" && <CustomField currentMap={currentMap} myCatCell={myCatCell} renewMap={renewMap} renewMode={renewMode} />}
-            {currentMode !== "Map" && <BattleField currentEnemy={currentEnemy}></BattleField>}
+            {currentMode === "Battle" && <BattleField currentEnemy={currentEnemy} renewMode={renewMode}></BattleField>}
+            {currentMode === "GameOver" && <GameOver text='Вы проиграли'></GameOver>}
+            {currentMode === "WinBattle" && <GameOver text='Все враги убиты'></GameOver>}
         </React.Fragment>
 
     );

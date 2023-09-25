@@ -2,13 +2,13 @@ import getRandomInt from './getRandom'
 import checkPartyHp from './checkPartyHp';
 
 export default function shrodingerSkillSetSwitch(currentSkill, enenyParty) {
-    switch (currentSkill) {
+    switch (currentSkill.name) {
         case "кусь":
             console.log(currentSkill);
             shredingerAttack(enenyParty);
             break;
         default:
-            alert("Что-то сломалось в навыках matadorSkillsetSwitch");
+            alert("Что-то сломалось в навыках shrodingerSkillSetSwitch");
     }
 }
 

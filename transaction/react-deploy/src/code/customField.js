@@ -21,6 +21,10 @@ export default function CustomField(props) {
         }
     }
 
+    function closeModal() {
+        setModalText();
+    }
+
     function createItems() {
         const listItems = arrState.map((number, id) => {
             return (
@@ -71,8 +75,25 @@ export default function CustomField(props) {
                 return;
             }
         }
-        cleanOldCat(arrState, props.myCatCell);
-        updateElement(clickRowId, clickCellId, props.myCatCell);
+        for (let i = 0; i < arrState.length; i++) {
+            const columnIndex = arrState[i].findIndex(
+                (element) => element === props.myCatCell
+            );
+            if (columnIndex !== -1) {
+                if (
+                    (clickRowId === i &&
+                        (clickCellId === columnIndex - 1 ||
+                            clickCellId === columnIndex + 1)) ||
+                    ((clickRowId === i + 1 || clickRowId === i - 1) &&
+                        (clickCellId === columnIndex ||
+                            clickCellId === columnIndex + 1 ||
+                            clickCellId === columnIndex - 1))
+                ) {
+                    cleanOldCat(arrState, props.myCatCell);
+                    updateElement(clickRowId, clickCellId, props.myCatCell);
+                }
+            }
+        }
     }
 
     function checkCatPosition(clickRowId, clickCellId, myCatCell) {
@@ -133,6 +154,7 @@ export default function CustomField(props) {
                         {modalText.isEnemy && (
                             <button onClick={() => setBattle(true)}>Атаковать</button>
                         )}
+                        <button onClick={() => closeModal()}>Закрыть</button>
                     </div>
                 </div>
             )}

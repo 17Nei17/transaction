@@ -4,7 +4,6 @@ import matadorSkillsetSwitch from "./skillsSets/matadorSkillsetSwitch";
 import getRandomInt from "./skillsSets/getRandom";
 import Matador from "./Objects/matador.js";
 import currentParty from "./Objects/currentParty.js";
-import checkPartyHp from "./skillsSets/checkPartyHp";
 import odnomeroSkillSetSwitch from './skillsSets/odnomeroSkillSetSwitch.js'
 import shrodingerSkillSetSwitch from './skillsSets/shrodingerSkillSetSwitch.js'
 
@@ -21,11 +20,16 @@ export default function BattleField(props) {
     useEffect(() => { });
 
     useEffect(() => {
+        console.log(Matador)
         if (currentTurn.isEnemy === true) {
             let enemyPartyAlive = false;
+            Matador.forEach((enemyCat, index) => {
+                if (enemyCat.isAlive) {
+                    enemyPartyAlive = true;
+                }
+            })
             currentTurn.turns.forEach((item, index) => {
                 if (currentTurn.isAlive) {
-                    enemyPartyAlive = true;
                     // ход живого противника
                     setTimeout(function () {
                         setActiveTurnIndex(index);
@@ -48,28 +52,31 @@ export default function BattleField(props) {
             });
             if (!enemyPartyAlive) {
                 console.log("все враги умерли")
+                props.renewMode('WinBattle', '')
             }
         } else {
             console.log("ход игрока");
             let isPartyAlive = false;
-
             currentParty.forEach((currentCat, index) => {
                 if (currentCat.isAlive) {
                     isPartyAlive = true;
                 }
             })
             if (isPartyAlive) {
+                setActiveTurnIndex(0);
                 if (!currentTurn.isAlive) {
                     changeTurn();
                 }
             } else {
                 console.log("Все союзники умерли")
+                props.renewMode('GameOver', '')
             }
         }
     }, [currentTurn]);
 
 
     function useSkill(skill, enemyName) {
+        console.log(enemyName)
         //todo enemyName это выбранный враг по которому ударить скиллом. Нужно написать выбор
         console.log("скилл игрока");
         switch (currentTurn.name) {

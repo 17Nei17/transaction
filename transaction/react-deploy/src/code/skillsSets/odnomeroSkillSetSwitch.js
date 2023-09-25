@@ -8,7 +8,7 @@ export default function odnomeroSkillSetSwitch(currentSkill, enenyParty) {
             shredingerAttack(enenyParty);
             break;
         default:
-            alert("Что-то сломалось в навыках matadorSkillsetSwitch");
+            alert("Что-то сломалось в навыках odnomeroSkillSetSwitch");
     }
 }
 
